@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        #video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        #video-background {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(50%) contrast(150%);
+        }
+        #content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            text-align: center;
+        }
+        form {
+            width: 400px;
+            margin: auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: none;
+        }
+        input[type="submit"], button {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: inherit;
+        }
+        button {
+            background-color: #2488FF;
+            margin-top: 10px;
+        }
+        p {
+            color: #170505;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        a {
+            color: #8f0811;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="video-container">
+        <iframe id="video-background" width="560" height="315" src="https://www.youtube.com/embed/jPZEGEuBK1Y?autoplay=1&mute=1&loop=1&controls=0&disablekb=1&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&autohide=1&playsinline=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+
+    <div id="content">
+        <form onsubmit="return validate()" action="/insecure" method="POST">
+            <h2>INSECURE LOGIN</h2>
+            
+            <img src="/static/img/stock-vector-illegal-stamp-422518492.jpg" alt="" height="200" width="auto">
+        
+            <input type="text" placeholder="Username" id="username" name="username">
+            <input type="password" placeholder="Password" id="password" name="password">
+            <input type="submit" value="Login">
+        </form>
+    </div>
+
+    <script>
+       function validate() {
+    var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
+
+    // Check if username and password are not empty
+    if (username.trim() === '' || password.trim() === '') {
+        alert("Username and password are required.");
+        return false;
+    }
+
+    // Additional validation logic can be added here...
+
+    // If all validation passes, return true
+    return true;
+}
+
+    </script>
+</body> 
+</html>

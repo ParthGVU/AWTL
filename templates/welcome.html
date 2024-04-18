@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Welcome</title>
+    <style>
+        body {
+            background-image: url("/static/img/final.jpg");
+            background-size: cover;
+        }
+
+        .container {
+            width: 400px;
+            height: auto;
+            margin: auto;
+            margin-top: 100px;
+            padding: 20px;
+            background-color: rgba(39, 208, 242, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(15, 1, 1, 0.5);
+            text-align: center;
+            opacity: 0.9;
+        }
+
+        h1 {
+            color: #000c01;
+        }
+
+        p {
+            color: #090000;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Welcome to Our Website</h1>
+        <p>Thank you for choosing our service. We are here to provide you with the best experience.</p>
+
+        <h3>Please Upload your details in a .txt file for KYC verification</h3>
+        <form action="/uplode_file" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" id="file">
+            <input type="submit" value="UPLOAD"><br>
+
+            <a href="/requirements.txt"><button><b>transaction</b></button></a>
+        </form>
+    </div>
+</body>
+
+</html>

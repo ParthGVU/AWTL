@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        body {
+            background-image: url("/static/img/Global_Bank_bg.jpeg");
+            background-size: cover;
+            font-family: Arial, sans-serif;
+        }
+        form {
+            width: 400px;
+            height: auto;
+            margin: auto;
+            margin-top: 100px;
+            padding: 20px;
+            background-color: rgba(183, 200, 249, 0.8); /* slightly transparent white */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            text-align: center;
+            opacity: 0.9; /* adjust this value to change the opacity */
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: none;
+        }
+        input[type="submit"], button {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: inherit;
+        }
+        button {
+            background-color: #2488FF; /* Adjusted button color */
+            margin-top: 10px; /* Added margin to separate from the login button */
+        }
+        p {
+            color: #170505;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        a {
+            color: #8f0811;
+            text-decoration: none;
+        }
+        /* Style for video container */
+    
+    </style>
+</head>
+<body>
+    <form onsubmit="return validate()" action="/" method="POST">
+        <h2>Login</h2>
+        
+        <img src="/static/img/global-bank-high-resolution-logo-transparent.png" alt="" height="200" width="auto">
+    
+        <input type="text" placeholder="Username" id="username" name="username">
+        <input type="password" placeholder="Password" id="password" name="password">
+        <input type="submit" value="Login">
+        <p>TRY SQL INJECTION  <a href="/insecure">INSECURE PAGE</a></p>
+        <p>Don't have an account? <a href="/signup">Sign Up</a></p>
+    </form>
+
+
+    </script>
+</body> 
+</html>
