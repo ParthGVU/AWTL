@@ -1,15 +1,22 @@
 import random
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, Response, request, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text  # Import text for SQL queries
+import datetime
+import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-import smtplib
 
 app = Flask(__name__)
 
 # Configure the SQLite database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///user_data.db'
 db = SQLAlchemy(app)
+
+
+def generate_otp():
+    return str(random.randint(10000, 99999))
+
 
 # Define the User model
 class User(db.Model):
@@ -20,7 +27,8 @@ class User(db.Model):
     password = db.Column(db.String(100), nullable=False)  # No hashing applied
     mobile = db.Column(db.String(15), nullable=False)
 
-# Route for login
+from sqlalchemy import text
+
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -32,8 +40,10 @@ def login():
             users = User.query.all()
             return render_template('admin.html', users=users)
 
-        # Query the User table to find the user
-        user = User.query.filter_by(name=name, password=password).first()
+        # Use SQLAlchemy session to execute SQL select statement
+        # Explicitly declare the SQL query as text to resolve the error
+        query = text(f"SELECT * FROM User WHERE name=:name AND password=:password")
+        user = db.session.execute(query, {'name': name, 'password': password}).first()
 
         if user:
             send_otp_to_email(user.email)
@@ -43,7 +53,9 @@ def login():
 
     return render_template('login.html')
 
-# Route for user signup
+
+
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -64,33 +76,35 @@ def signup():
 
     return render_template('signup.html')
 
-# Route for OTP verification
+
 @app.route('/otp', methods=['GET', 'POST'])
 def otp():
     if request.method == 'POST':
         user_otp = request.form['otp']
 
-        # Validate OTP
-        if user_otp == session.get('otp'):
+        if user_otp == otp:
+            print("true")
             return render_template('welcome.html')
         else:
-            return 'Invalid OTP. Please try again.'
+            print("false")
 
     return render_template('otp1.html')
 
-# Function to send OTP to the user's email
+
 def send_otp_to_email(receiver_email):
-    # Sender's email and password (you may need to use app-specific passwords for Gmail)
+    # Sender's email and password
     sender_email = "mickeymouseparth@gmail.com"
-    sender_password = "your_sender_password"
+    sender_password = "lizr yong lnpz gxzy"
 
-    # Generate OTP
+    # Generate an OTP
+    global otp
     otp = generate_otp()
-    session['otp'] = otp  # Store OTP in session for verification
 
-    # Create email message
+    # Create the message with the OTP
     message_body = f"Your OTP is: {otp}"
     subject = "OTP Verification"
+
+    # Create an email message
     message = MIMEMultipart()
     message["From"] = sender_email
     message["To"] = receiver_email
@@ -108,8 +122,29 @@ def send_otp_to_email(receiver_email):
     except Exception as e:
         print(f"Failed to send OTP: {e}")
 
+
+from sqlalchemy import text
+
+from sqlalchemy import text
+
+@app.route('/insecure', methods=['GET', 'POST'])
+def insecure_login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        # Injected SQL query with correct syntax
+        query = text(f"SELECT * FROM User WHERE name='{username}' AND (password='{password}')")
+        user = db.session.execute(query).first()
+
+        if user:
+            return redirect(url_for('otp'))
+        else:
+            return 'Login failed. Please check your username and password.'
+
+    return render_template('insecure.html')
+
 if __name__ == '__main__':
-    app.secret_key = 'your_secret_key'  # Set a secret key for session management
     with app.app_context():
         db.create_all()
     app.run(debug=True)
