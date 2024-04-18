@@ -1,5 +1,5 @@
 import random
-from flask import Flask, Response, request, render_template, redirect, url_for
+from flask import Flask, Response, request, render_template, redirect, url_for, g
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text  # Import text for SQL queries
 import datetime
@@ -27,7 +27,6 @@ class User(db.Model):
     password = db.Column(db.String(100), nullable=False)  # No hashing applied
     mobile = db.Column(db.String(15), nullable=False)
 
-from sqlalchemy import text
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -52,8 +51,6 @@ def login():
             return 'Login failed. Please check your username and password.'
 
     return render_template('login.html')
-
-
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -82,7 +79,7 @@ def otp():
     if request.method == 'POST':
         user_otp = request.form['otp']
 
-        if user_otp == otp:
+        if user_otp == g.otp:
             print("true")
             return render_template('welcome.html')
         else:
@@ -97,11 +94,10 @@ def send_otp_to_email(receiver_email):
     sender_password = "lizr yong lnpz gxzy"
 
     # Generate an OTP
-    global otp
-    otp = generate_otp()
+    g.otp = generate_otp()  # Storing OTP in context
 
     # Create the message with the OTP
-    message_body = f"Your OTP is: {otp}"
+    message_body = f"Your OTP is: {g.otp}"
     subject = "OTP Verification"
 
     # Create an email message
@@ -123,10 +119,6 @@ def send_otp_to_email(receiver_email):
         print(f"Failed to send OTP: {e}")
 
 
-from sqlalchemy import text
-
-from sqlalchemy import text
-
 @app.route('/insecure', methods=['GET', 'POST'])
 def insecure_login():
     if request.method == 'POST':
@@ -138,11 +130,13 @@ def insecure_login():
         user = db.session.execute(query).first()
 
         if user:
+            g.otp = generate_otp()  # Store OTP in the context
             return redirect(url_for('otp'))
         else:
             return 'Login failed. Please check your username and password.'
 
     return render_template('insecure.html')
+
 
 if __name__ == '__main__':
     with app.app_context():
